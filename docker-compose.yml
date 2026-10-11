@@ -1,0 +1,18 @@
+version: '3.8'                          # 1. Phiên bản cú pháp của Docker Compose
+
+services:                               # 2. Khai báo danh sách các ứng dụng/container cần chạy
+  order-service:                        # 3. Tên định danh của service này trong file compose
+    build:                              # 4. Hướng dẫn Docker cách tự đóng gói mã nguồn thành Image
+      context: ./order-service          #    -> Thư mục chứa mã nguồn & Dockerfile để build
+    container_name: order-service       # 5. Tên hiển thị của container trên Docker Desktop (cột Name)
+    ports:                              # 6. Mở cổng kết nối giữa Máy thật <-> Container
+      - "8085:8085"                     #    -> [Cổng máy bạn]:[Cổng bên trong container]
+    environment:                        # 7. Truyền biến môi trường vào ứng dụng Spring Boot
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://shared-postgres:5432/order_service_db
+    networks:                           # 8. Chỉ định container này cắm vào mạng ảo nào
+      - ss2_e-learning-net
+
+networks:                               # 9. Khai báo các mạng ảo
+  ss2_e-learning-net:
+    external: true                      # 10. THUỘC TÍNH THEN CHỐT: Báo cho Docker biết mạng này
+    #     ĐÃ TỒN TẠI SẴN Ở BÊN NGOÀI, KHÔNG TỰ TẠO MỚI!
